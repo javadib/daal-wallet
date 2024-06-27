@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { FindOneOptions, Like, Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -41,6 +41,10 @@ export class UserService {
     return this.repo.findOne({ where: { id } });
   }
 
+  async findOne2(options: FindOneOptions<User>) {
+    return this.repo.findOne(options);
+  }
+
   async update(id: number, user: Partial<User>) {
     const updateResult = await this.repo.update(id, user);
 
@@ -55,7 +59,12 @@ export class UserService {
     userId: number,
     amount: number,
   ): Promise<{ reference_id: number }> {
-    const user = await this.findOne(userId);
+    const user = await this.findOne2({
+      relations: {
+        transactions: true,
+      },
+      where: { id: userId },
+    });
     if (!user) {
       throw new NotFoundException('User not found');
     }
@@ -66,12 +75,9 @@ export class UserService {
     }
 
     user.balance += amount;
-    const transaction1 = user.addTransaction(amount);
+    const transaction = user.addTransaction(amount);
     await this.repo.save(user, { reload: true });
 
-    // const transaction = this.transactionRepository.create({ user, amount });
-    // await this.transactionRepository.save(transaction);
-
-    return { reference_id: transaction1.id };
+    return { reference_id: transaction.id };
   }
 }
