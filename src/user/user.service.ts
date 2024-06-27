@@ -7,8 +7,14 @@ import { Like, Repository } from 'typeorm';
 export class UserService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
+  getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
   async create(user: Partial<User>): Promise<User> {
     const newUser = this.repo.create(user);
+    newUser.balance = this.getRandomArbitrary(10000, 1000000);
+
     return this.repo.save(newUser);
   }
 

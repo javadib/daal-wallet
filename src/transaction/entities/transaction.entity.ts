@@ -9,7 +9,7 @@ export class Transaction extends BaseEntityEx<number> {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({type: 'float'})
   amount: number;
 
   @Column()
