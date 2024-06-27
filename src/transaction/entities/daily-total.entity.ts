@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntityEx } from '../../core/base.entityEx';
-import { payType } from './payType';
+import { PayType } from './payType';
 
 @Entity()
 export class DailyTotal extends BaseEntityEx<number> {
@@ -11,8 +11,8 @@ export class DailyTotal extends BaseEntityEx<number> {
   unixDate: number;
 
   @Column()
-  payType: payType;
+  payType: PayType;
 
-  @Column('decimal', { precision: 15, scale: 2 })
+  @Column()
   totalAmount: number;
 }

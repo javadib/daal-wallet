@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
@@ -13,7 +17,7 @@ export class UserService {
 
   async create(user: Partial<User>): Promise<User> {
     const newUser = this.repo.create(user);
-    newUser.balance = this.getRandomArbitrary(10000, 1000000).toFixed(2);
+    // newUser.balance = this.getRandomArbitrary(10000, 1000000);
 
     return this.repo.save(newUser);
   }
@@ -45,5 +49,29 @@ export class UserService {
 
   async delete(id: number) {
     return this.repo.delete(id);
+  }
+
+  async addMoney(
+    userId: number,
+    amount: number,
+  ): Promise<{ reference_id: number }> {
+    const user = await this.findOne(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.balance + amount < 0) {
+      const msg = "User balance can't be negative. First charge your balance.";
+      throw new UnprocessableEntityException(msg);
+    }
+
+    user.balance += amount;
+    const transaction1 = user.addTransaction(amount);
+    await this.repo.save(user, { reload: true });
+
+    // const transaction = this.transactionRepository.create({ user, amount });
+    // await this.transactionRepository.save(transaction);
+
+    return { reference_id: transaction1.id };
   }
 }

@@ -1,26 +1,24 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { BaseEntityEx } from '../../core/base.entityEx';
-import { payType } from './payType';
-import { payMethod } from './payMethod';
+import { PayType } from './payType';
+import { PayMethod } from './payMethod';
 
 @Entity()
 export class Transaction extends BaseEntityEx<number> {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
-  @Column('decimal', { precision: 15, scale: 2 })
+  @Column()
   amount: number;
 
   @Column()
-  payType: payType;
+  payType: PayType;
 
   @Column()
-  payMethod: payMethod;
+  payMethod: PayMethod;
 
-  @Column()
-  referenceId: string;
+  @ManyToOne(type => User, user => user.transactions)
 
-  @ManyToOne(() => User, (user) => user.transactions)
   user: User;
 }

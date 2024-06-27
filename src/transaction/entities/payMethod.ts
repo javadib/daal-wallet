@@ -1,4 +1,4 @@
-export enum payMethod {
+export enum PayMethod {
   online,
   pos,
   cash,

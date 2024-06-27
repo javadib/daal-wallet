@@ -20,8 +20,6 @@ export class TransactionService {
     const keyword = query.keyword || '';
 
     const [data, totalCount] = await this.repo.findAndCount({
-      where: { referenceId: Like('%' + keyword + '%') },
-      order: { referenceId: 'DESC' },
       take: take,
       skip: skip,
     });

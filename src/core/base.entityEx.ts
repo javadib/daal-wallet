@@ -7,9 +7,9 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class BaseEntityEx<T> extends BaseEntity {
+export class BaseEntityEx<T> {
   constructor(id?: T) {
-    super();
+    // super();
 
     this.id = id;
   }
@@ -17,7 +17,7 @@ export class BaseEntityEx<T> extends BaseEntity {
   id?: T;
 
   @CreateDateColumn()
-  createAt: Date;
+  createAt?: Date;
 
   @Column({ nullable: true })
   createBy?: number;

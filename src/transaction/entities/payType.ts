@@ -1,4 +1,4 @@
-export enum payType {
+export enum PayType {
   income,
   expense,
 }
