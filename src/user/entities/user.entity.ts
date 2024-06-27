@@ -7,6 +7,9 @@ export class User extends BaseEntityEx<number> {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  firstName: string;
+
   @Column({ default: 0 })
   balance: number;
 
