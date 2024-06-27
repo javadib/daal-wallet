@@ -1,4 +1,10 @@
-import { BaseEntity, Column, Entity } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class BaseEntityEx<T> extends BaseEntity {
@@ -8,17 +14,17 @@ export class BaseEntityEx<T> extends BaseEntity {
     this.id = id;
   }
 
-  id: T;
+  id?: T;
+
+  @CreateDateColumn()
+  createAt: Date;
 
   @Column({ nullable: true })
-  createAt?: Date;
+  createBy?: number;
 
-  @Column({ nullable: true })
-  createBy?: string;
-
-  @Column({ nullable: true })
+  @UpdateDateColumn()
   lastUpdatedAt?: Date;
 
   @Column({ nullable: true })
-  lastUpdatedBy?: string;
+  lastUpdatedBy?: number;
 }

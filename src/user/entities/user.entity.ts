@@ -5,7 +5,7 @@ import { Transaction } from '../../transaction/entities/transaction.entity';
 @Entity()
 export class User extends BaseEntityEx<number> {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column()
   firstName: string;

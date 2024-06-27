@@ -10,20 +10,25 @@ export class UserService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
   async create(createUserDto: CreateUserDto) {
-    return this.repo.create(createUserDto);
+    const userDto2 = createUserDto as User;
+
+    return User.save(userDto2);
+    // return this.repo.create(userDto2);
   }
 
-  async findAll(query: any) {
+  async findAll(query: any = {}) {
     const take = query.take || 10;
     const skip = query.skip || 0;
     const keyword = query.keyword || '';
 
-    return this.repo.findAndCount({
+    const [data, totalCount] = await this.repo.findAndCount({
       where: { firstName: Like('%' + keyword + '%') },
       order: { firstName: 'DESC' },
       take: take,
       skip: skip,
     });
+
+    return { data, totalCount };
   }
 
   async findOne(id: number) {

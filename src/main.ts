@@ -8,7 +8,7 @@ async function bootstrap() {
 
   const globalPrefix = 'api';
   const port = process.env.PORT || 3000;
-  // app.setGlobalPrefix(globalPrefix);
+  app.setGlobalPrefix(globalPrefix);
   setupOpenApi(app);
 
   Logger.log(`🚀 Application is running on: http://localhost:${port}}`);
