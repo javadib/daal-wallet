@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -39,8 +40,13 @@ export class UserController {
     summary: 'Find a model instance by {{id}} from the data source.',
   })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  async findOne(@Param('id') id: number) {
+    const user = await this.userService.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User does not exist!');
+    }
+
+    return user;
   }
 
   @ApiOperation({
@@ -56,7 +62,12 @@ export class UserController {
     summary: "Delete a model instance by '{id}' from the data source.",
   })
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.userService.remove(id);
+  async remove(@Param('id') id: number) {
+    const user = await this.userService.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User does not exist!');
+    }
+
+    return this.userService.delete(id);
   }
 }

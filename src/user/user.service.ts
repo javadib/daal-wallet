@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
@@ -9,11 +7,9 @@ import { Like, Repository } from 'typeorm';
 export class UserService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
-  async create(createUserDto: CreateUserDto) {
-    const userDto2 = createUserDto as User;
-
-    return User.save(userDto2);
-    // return this.repo.create(userDto2);
+  async create(user: Partial<User>): Promise<User> {
+    const newUser = this.repo.create(user);
+    return this.repo.save(newUser);
   }
 
   async findAll(query: any = {}) {
@@ -32,14 +28,16 @@ export class UserService {
   }
 
   async findOne(id: number) {
-    return this.repo.create({ id: id });
+    return this.repo.findOne({ where: { id } });
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    return this.repo.update(id, updateUserDto);
+  async update(id: number, user: Partial<User>) {
+    const updateResult = await this.repo.update(id, user);
+
+    return this.repo.findOne({ where: { id } });
   }
 
-  async remove(id: number) {
+  async delete(id: number) {
     return this.repo.delete(id);
   }
 }
