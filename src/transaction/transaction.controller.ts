@@ -5,7 +5,7 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
+  Delete, NotFoundException,
 } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
@@ -39,8 +39,13 @@ export class TransactionController {
     summary: 'Find a model instance by {{id}} from the data source.',
   })
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.transactionService.findOne(+id);
+  async findOne(@Param('id') id: number) {
+    const user = await this.transactionService.findOne(id);
+    if (!user) {
+      throw new NotFoundException(`Transaction does not exist!`);
+    }
+
+    return user;
   }
 
   @ApiOperation({
@@ -59,7 +64,12 @@ export class TransactionController {
     summary: "Delete a model instance by '{id}' from the data source.",
   })
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.transactionService.delete(+id);
+  async remove(@Param('id') id: number) {
+    const user = await this.transactionService.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User does not exist!');
+    }
+
+    return this.transactionService.delete(id);
   }
 }
