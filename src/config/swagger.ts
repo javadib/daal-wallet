@@ -12,6 +12,8 @@ export default function setupOpenApi(app: INestApplication) {
     // .addServer('https://staging.yourapi.com/', 'Staging')
     // .addServer('https://production.yourapi.com/', 'Production')
     // .addTag('v1')
+    .addApiKey()
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
