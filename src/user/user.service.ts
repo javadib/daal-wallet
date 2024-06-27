@@ -13,7 +13,7 @@ export class UserService {
 
   async create(user: Partial<User>): Promise<User> {
     const newUser = this.repo.create(user);
-    newUser.balance = this.getRandomArbitrary(10000, 1000000);
+    newUser.balance = this.getRandomArbitrary(10000, 1000000).toFixed(2);
 
     return this.repo.save(newUser);
   }

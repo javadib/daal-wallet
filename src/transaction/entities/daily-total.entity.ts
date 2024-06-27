@@ -13,6 +13,6 @@ export class DailyTotal extends BaseEntityEx<number> {
   @Column()
   payType: payType;
 
-  @Column({ type: 'float' })
+  @Column('decimal', { precision: 15, scale: 2 })
   totalAmount: number;
 }

@@ -10,7 +10,7 @@ export class User extends BaseEntityEx<number> {
   @Column()
   firstName: string;
 
-  @Column()
+  @Column('decimal', { precision: 15, scale: 2 })
   balance: number;
 
   @OneToMany(() => Transaction, (transaction) => transaction.user)
