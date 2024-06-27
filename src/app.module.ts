@@ -5,18 +5,24 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { WalletModule } from './wallet/wallet.module';
 import { UserModule } from './user/user.module';
 import { TransactionModule } from './transaction/transaction.module';
+import * as path from 'path';
 
 @Module({
   imports: [
+    //todo: Jus for dev mode. `synchronize` & `migrationsRun` not suitable for production mode.
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: 'mysql',
       host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'password',
-      database: 'wallet',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      port: 3306,
+      username: 'root',
+      password: 'root',
+      database: 'daalW',
+      entities: [path.join(__dirname, '/**/*.entity{.ts,.js}')],
+      // autoLoadEntities: true,
+      retryAttempts: 5,
+      retryDelay: 3,
       synchronize: true,
+      migrationsRun: true,
     }),
     WalletModule,
     UserModule,

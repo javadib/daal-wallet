@@ -1,9 +1,9 @@
 import { Transaction } from '../../transaction/entities/transaction.entity';
 
 export class CreateUserDto {
-  id: number;
+  id?: number;
 
-  balance: number;
+  firstName: string;
 
   transactions: Transaction[];
 }
