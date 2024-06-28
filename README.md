@@ -113,5 +113,9 @@ Ensure Docker is installed and running. Build and start the container:
 Run unit tests:
 `npm run test`
 
+###
+![test result](doc/test-result.png)
+
+
 ##
 Thank you for using our User Wallet Management
