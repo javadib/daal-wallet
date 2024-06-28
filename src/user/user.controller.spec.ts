@@ -8,6 +8,7 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { User } from './entities/user.entity';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -48,23 +49,61 @@ describe('UserController', () => {
 
       expect(await controller.create(dto)).toBe(result);
     });
+
+    it('should call create method with correct parameters', async () => {
+      const dto: CreateUserDto = { firstName: 'Test User' };
+      jest.spyOn(service, 'create').mockResolvedValue({} as any);
+
+      await controller.create(dto);
+      expect(service.create).toHaveBeenCalledWith(dto);
+    });
+
+    it('should throw an error if service create method fails', async () => {
+      const dto: CreateUserDto = { firstName: 'Test User' };
+      jest
+        .spyOn(service, 'create')
+        .mockRejectedValue(new Error('Service Error'));
+
+      await expect(controller.create(dto)).rejects.toThrow('Service Error');
+    });
   });
 
   describe('findAll', () => {
     it('should return an array of users', async () => {
-      const result = [{ id: 1, firstName: 'Test User', balance: 0 }];
-      jest.spyOn(service, 'findAll').mockResolvedValue(result as any);
+      const result: { data: User[]; totalCount: number } = {
+        data: [{ id: 1, firstName: 'Test User', balance: 0 } as User],
+        totalCount: 2,
+      };
+      jest
+        .spyOn(service, 'findAll')
+        .mockResolvedValue(result as { data: User[]; totalCount: number });
 
-      expect(await controller.findAll({})).toBe(result);
+      const actual = await controller.findAll({});
+      expect(actual).toBe(result);
     });
+
+    it('should call findAll method with correct parameters', async () => {
+      const query = { name: 'Test' };
+      jest.spyOn(service, 'findAll').mockResolvedValue([] as any);
+
+      await controller.findAll(query);
+      expect(service.findAll).toHaveBeenCalledWith(query);
+    });
+
+    it('should throw an error if service findAll method fails', async () => {
+      const query = { name: 'Test' };
+      jest.spyOn(service, 'findAll').mockRejectedValue(new Error('Service Error'));
+
+      await expect(controller.findAll(query)).rejects.toThrow('Service Error');
+    });
+
   });
 
   describe('findOne', () => {
     it('should return a user', async () => {
       const result = {
         id: 1,
-        name: 'Test User',
-        email: 'test@example.com',
+        firstName: 'Test User',
         balance: 0,
       };
       jest.spyOn(service, 'findOne').mockResolvedValue(result as any);
@@ -117,6 +156,22 @@ describe('UserController', () => {
 
       expect(await controller.getBalance(1)).toBe(result);
     });
+
+    it('should call getBalance method with correct parameters', async () => {
+      const userId = 1;
+      jest.spyOn(service, 'getBalance').mockResolvedValue({ balance: 1000 } as any);
+
+      await controller.getBalance(userId);
+      expect(service.getBalance).toHaveBeenCalledWith(userId);
+    });
+
+    it('should throw an error if service getBalance method fails', async () => {
+      const userId = 1;
+      jest.spyOn(service, 'getBalance').mockRejectedValue(new Error('Service Error'));
+
+      await expect(controller.getBalance(userId)).rejects.toThrow('Service Error');
+    });
+
   });
 
   describe('addMoney', () => {
