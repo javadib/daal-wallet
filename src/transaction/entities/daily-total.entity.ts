@@ -2,7 +2,6 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { BaseEntityEx } from '../../core/base.entityEx';
 import { Transaction } from './transaction.entity';
 import { PayType } from './payType';
-import {OnEvent} from "@nestjs/event-emitter";
 
 @Entity()
 export class DailyTotal extends BaseEntityEx<number> {
@@ -25,6 +24,4 @@ export class DailyTotal extends BaseEntityEx<number> {
 
     return this;
   }
-
-
 }

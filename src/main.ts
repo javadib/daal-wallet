@@ -6,6 +6,13 @@ import setupOpenApi from './config/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+  //   AppModule,
+  //   {
+  //     transport: Transport.RMQ,
+  //   },
+  // );
+
   app.useGlobalPipes(new ValidationPipe());
 
   const globalPrefix = 'api';
