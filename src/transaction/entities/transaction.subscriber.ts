@@ -26,7 +26,8 @@ export class TransactionSubscriber
     const unixDate = now.getTime() / 1000;
 
     const dailyTotalRepo = event.connection.getRepository(DailyTotal);
-    dailyTotalRepo.findOne({ where: { id: unixDate } })
+    dailyTotalRepo
+      .findOne({ where: { id: unixDate } })
       .then((dailyTotal) => {
         if (!dailyTotal) {
           const newDailyT = {
