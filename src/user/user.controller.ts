@@ -82,7 +82,7 @@ export class UserController {
   }
 
   @ApiOperation({
-    summary: 'add/subtract amount to user wallet',
+    summary: 'add/subtract amount to specofic user wallet',
   })
   @Post('money')
   async addMoney(@Body() body: CreateTransactionDto) {
