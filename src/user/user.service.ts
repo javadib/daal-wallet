@@ -80,4 +80,11 @@ export class UserService {
 
     return { reference_id: transaction.id };
   }
+
+  async getBalance(userId: number): Promise<{ balance: number }> {
+    const user = await this.findOne(userId);
+    if (!user) throw new NotFoundException('User not found');
+
+    return { balance: user.balance };
+  }
 }

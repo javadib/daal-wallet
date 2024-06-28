@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transaction } from './entities/transaction.entity';
-import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class TransactionService {
@@ -40,10 +39,5 @@ export class TransactionService {
 
   async delete(id: number) {
     return this.repo.delete(id);
-  }
-
-  @OnEvent('job.updated')
-  handleOrderCreatedEvent(payload: any) {
-    console.log(payload);
   }
 }

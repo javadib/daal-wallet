@@ -2,17 +2,14 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { WalletModule } from './wallet/wallet.module';
 import { UserModule } from './user/user.module';
 import { TransactionModule } from './transaction/transaction.module';
 import * as path from 'path';
 import { ConfigModule } from '@nestjs/config';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    EventEmitterModule.forRoot(),
     //todo: Jus for dev mode. `synchronize` & `migrationsRun` not suitable for production mode.
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -29,7 +26,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
       synchronize: true,
       migrationsRun: true,
     }),
-    WalletModule,
     UserModule,
     TransactionModule,
   ],

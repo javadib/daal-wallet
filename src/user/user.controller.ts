@@ -7,11 +7,13 @@ import {
   Param,
   Delete,
   NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CreateTransactionDto } from '../transaction/dto/create-transaction.dto';
 
 @ApiTags('User')
 @Controller('user')
@@ -69,5 +71,27 @@ export class UserController {
     }
 
     return this.userService.delete(id);
+  }
+
+  @ApiOperation({
+    summary: 'Get balance of specific user',
+  })
+  @Get(':user_id/balance')
+  async getBalance(@Param('user_id') userId: number) {
+    return this.userService.getBalance(userId);
+  }
+
+  @ApiOperation({
+    summary: 'add/subtract amount to user wallet',
+  })
+  @Post('money')
+  async addMoney(@Body() body: CreateTransactionDto) {
+    if (body.amount == 0) {
+      throw new UnprocessableEntityException(
+        'amount should more/less than doer',
+      );
+    }
+
+    return this.userService.addMoney(body.user_id, body.amount);
   }
 }
