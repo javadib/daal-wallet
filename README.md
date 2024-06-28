@@ -73,15 +73,18 @@ This project is a microservice designed to manage user wallet data, built using 
 #
 #### Setup and Installation
 
-1.  **Clone the repository**:
-2. 
-    ```
+1.  **Clone the repository** :  
+   ```
       git clone https://github.com/javadib/daal-wallet.git 
       cd daal-wallet
    ```
 
-2.  **Install dependencies**:
-    `npm install`
+
+###
+2. **Install dependencies** :
+   ```npm install```
+
+####
 3.  **Environment Variables**: Create a `.env` file in the root directory and add the following environment variables:
 
     ```
@@ -92,11 +95,12 @@ This project is a microservice designed to manage user wallet data, built using 
     DATABASE_NAME=yourdatabase
     ```
 
+###
 4.  **Run the application**:
     `npm run start`
 
-###
-1.  **Run in Docker**: Ensure Docker is installed and running. Build and start the container:    
+### Run in Docker: 
+Ensure Docker is installed and running. Build and start the container:    
     `docker-compose up --build`
 
 ###
