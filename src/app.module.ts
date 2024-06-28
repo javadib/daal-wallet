@@ -11,7 +11,6 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot(),
 
-    //todo: Jus for dev mode. `synchronize` & `migrationsRun` not suitable for production mode.
     // TypeOrmModule.forRoot({
     //   type: 'mysql',
     //   host: process.env.DB_HOST || 'localhost',
@@ -27,6 +26,8 @@ import { ConfigModule } from '@nestjs/config';
     //   synchronize: true,
     //   migrationsRun: true,
     // }),
+
+    //todo: Jus for dev mode. `synchronize` & `migrationsRun` not suitable for production mode.
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.P_DB_HOST || 'localhost',
