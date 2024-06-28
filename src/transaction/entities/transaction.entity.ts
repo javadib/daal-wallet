@@ -1,4 +1,9 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { BaseEntityEx } from '../../core/base.entityEx';
 import { PayType } from './payType';
@@ -18,7 +23,6 @@ export class Transaction extends BaseEntityEx<number> {
   @Column()
   payMethod: PayMethod;
 
-  @ManyToOne(type => User, user => user.transactions)
-
+  @ManyToOne((type) => User, (user) => user.transactions)
   user: User;
 }

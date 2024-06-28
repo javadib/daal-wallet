@@ -7,10 +7,12 @@ import { UserModule } from './user/user.module';
 import { TransactionModule } from './transaction/transaction.module';
 import * as path from 'path';
 import { ConfigModule } from '@nestjs/config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    EventEmitterModule.forRoot(),
     //todo: Jus for dev mode. `synchronize` & `migrationsRun` not suitable for production mode.
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -21,6 +23,7 @@ import { ConfigModule } from '@nestjs/config';
       database: process.env.POSTGRES_DATABASE,
       entities: [path.join(__dirname, '/**/*.entity{.ts,.js}')],
       // autoLoadEntities: true,
+      subscribers: [path.join(__dirname, '/**/*.subscriber{.ts,.js}')],
       retryAttempts: 5,
       retryDelay: 3,
       synchronize: true,
