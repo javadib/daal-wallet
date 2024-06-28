@@ -14,70 +14,39 @@ services:
     ports:
       - "3307:3306"
 
-#  db:
-#    image: postgres:16
-#    restart: always
-#    environment:
-#      - POSTGRES_PASSWORD=postgres
-#    container_name: postgres
-#    volumes:
-#      - ./pgdata:/var/lib/postgresql2/data
-#    ports:
-#      - '5431:5432'
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: daalW
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    container_name: postgres
+    volumes:
+      - ./pgdata:/var/lib/postgresql2/data
+    ports:
+      - '5433:5432'
 
-  app2:
+  app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: nest-docker-postgres
+    container_name: daal-wallet
     environment:
       DB_HOST: mysql
       DB_PORT: 3306
       DB_USERNAME: root
       DB_PASSWORD: root
       DB_NAME: daalW
-#      - PORT=${PORT}
+
+      P_DB_HOST: db
+      P_DB_PORT: 5432
+      P_DB_USERNAME: postgres
+      P_DB_PASSWORD: postgres
+      P_DB_NAME: daalW
     ports:
       - '3009:3000'
     depends_on:
-      - mysql
+      - db
     volumes:
       - ./src:/app/src
-
-#  app:
-#    build: .
-#    ports:
-#      - "3009:3000"
-#    depends_on:
-#      - mysql
-#    environment:
-#      DB_HOST: 127.0.0.1
-#      DB_PORT: 3306
-#      DB_USERNAME: pub
-#      DB_PASSWORD: root
-#      DB_NAME: daalW
-#
-#      TYPEORM_CONNECTION: postgres
-#      TYPEORM_HOST: db
-#      TYPEORM_PORT: 5432
-#      TYPEORM_USERNAME: postgres
-#      TYPEORM_PASSWORD: password
-#      TYPEORM_DATABASE: wallet
-#      TYPEORM_SYNCHRONIZE: true
-#      TYPEORM_ENTITIES: dist/**/*.entity.js
-#    volumes:
-#      - .:/usr/src/app
-#      - /usr/src/app/node_modules
-
-
-#  pgadmin:
-#    image: dpage/pgadmin4
-#    restart: always
-#    container_name: nest-pgadmin4
-#    environment:
-#      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-#      - PGADMIN_DEFAULT_PASSWORD=pgadmin4
-#    ports:
-#      - '5050:80'
-#    depends_on:
-#      - db
