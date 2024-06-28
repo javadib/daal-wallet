@@ -6,7 +6,7 @@ export default function setupOpenApi(app: INestApplication) {
   const pack = require('../../package.json');
   const config = new DocumentBuilder()
     .setTitle('Daal Wallet Service')
-    .setDescription('Your API description')
+    .setDescription('Daal User Wallet Management')
     .setVersion(pack.version)
     // .addServer('http://localhost:3000/', 'Local environment')
     // .addServer('https://staging.yourapi.com/', 'Staging')
