@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import {Logger, Module} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -10,14 +10,15 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot(),
+
     //todo: Jus for dev mode. `synchronize` & `migrationsRun` not suitable for production mode.
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.POSTGRES_HOST,
-      port: parseInt(process.env.POSTGRES_PORT),
-      password: process.env.POSTGRES_PASSWORD,
-      username: process.env.POSTGRES_USER,
-      database: process.env.POSTGRES_DATABASE,
+      host: process.env.DB_HOST || 'localhost',
+      port: +process.env.DB_PORT || 3306,
+      username: process.env.DB_USERNAME || 'root',
+      password: process.env.DB_PASSWORD || 'root',
+      database: process.env.DB_NAME || 'daalW',
       entities: [path.join(__dirname, '/**/*.entity{.ts,.js}')],
       // autoLoadEntities: true,
       subscribers: [path.join(__dirname, '/**/*.subscriber{.ts,.js}')],
@@ -32,4 +33,8 @@ import { ConfigModule } from '@nestjs/config';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    Logger.log(`Dataase config: ${process.env.DB_HOST}`);
+  }
+}

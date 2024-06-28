@@ -1,34 +1,83 @@
 version: '3.8'
 services:
-  db:
-    image: postgres:13
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: wallet
-    ports:
-      - "5432:5432"
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: daalW
+      MYSQL_USER: pub
+      MYSQL_PASSWORD: root
     volumes:
-      - db-data:/var/lib/postgresql/data
-
-  app:
-    build: .
+      - ./mysql:/var/lib/mysql
     ports:
-      - "3000:3000"
+      - "3307:3306"
+
+#  db:
+#    image: postgres:16
+#    restart: always
+#    environment:
+#      - POSTGRES_PASSWORD=postgres
+#    container_name: postgres
+#    volumes:
+#      - ./pgdata:/var/lib/postgresql2/data
+#    ports:
+#      - '5431:5432'
+
+  app2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-docker-postgres
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      DB_NAME: daalW
+#      - PORT=${PORT}
+    ports:
+      - '3009:3000'
     depends_on:
-      - db
-    environment:
-      TYPEORM_CONNECTION: postgres
-      TYPEORM_HOST: db
-      TYPEORM_PORT: 5432
-      TYPEORM_USERNAME: postgres
-      TYPEORM_PASSWORD: password
-      TYPEORM_DATABASE: wallet
-      TYPEORM_SYNCHRONIZE: true
-      TYPEORM_ENTITIES: dist/**/*.entity.js
+      - mysql
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./src:/app/src
 
-volumes:
-  db-data:
+#  app:
+#    build: .
+#    ports:
+#      - "3009:3000"
+#    depends_on:
+#      - mysql
+#    environment:
+#      DB_HOST: 127.0.0.1
+#      DB_PORT: 3306
+#      DB_USERNAME: pub
+#      DB_PASSWORD: root
+#      DB_NAME: daalW
+#
+#      TYPEORM_CONNECTION: postgres
+#      TYPEORM_HOST: db
+#      TYPEORM_PORT: 5432
+#      TYPEORM_USERNAME: postgres
+#      TYPEORM_PASSWORD: password
+#      TYPEORM_DATABASE: wallet
+#      TYPEORM_SYNCHRONIZE: true
+#      TYPEORM_ENTITIES: dist/**/*.entity.js
+#    volumes:
+#      - .:/usr/src/app
+#      - /usr/src/app/node_modules
+
+
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    restart: always
+#    container_name: nest-pgadmin4
+#    environment:
+#      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+#      - PGADMIN_DEFAULT_PASSWORD=pgadmin4
+#    ports:
+#      - '5050:80'
+#    depends_on:
+#      - db
