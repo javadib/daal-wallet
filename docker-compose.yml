@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: daalW
+      MYSQL_USER: pub
+      MYSQL_PASSWORD: root
+    volumes:
+      - ./mysql:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: daalW
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    container_name: postgres
+    volumes:
+      - ./pgdata:/var/lib/postgresql2/data
+    ports:
+      - '5433:5432'
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: daal-wallet
+    restart: unless-stopped
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      DB_NAME: daalW
+
+      P_DB_HOST: db
+      P_DB_PORT: 5432
+      P_DB_USERNAME: postgres
+      P_DB_PASSWORD: postgres
+      P_DB_NAME: daalW
+    ports:
+      - '3009:3000'
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app/src
