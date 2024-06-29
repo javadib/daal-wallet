@@ -88,11 +88,11 @@ This project is a microservice designed to manage user wallet data, built using 
 3.  **Environment Variables**: Create a `.env` file in the root directory and add the following environment variables:
 
     ```
-    DATABASE_HOST=localhost
-    DATABASE_PORT=5432
-    DATABASE_USER=youruser
-    DATABASE_PASSWORD=yourpassword
-    DATABASE_NAME=yourdatabase
+    P_DB_HOST=127.0.0.1
+    P_DB_PORT=5432
+    P_DB_USERNAME=postgres
+    P_DB_PASSWORD=postgres
+    P_DB_NAME=daalW
     ```
 
 ###
